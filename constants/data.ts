@@ -1,6 +1,6 @@
 import { icons } from './icons';
 
-export const tabs = [
+export const tabs: AppTab[] = [
   { name: 'index', title: 'Home', icon: icons.home },
   { name: 'subscriptions', title: 'Subscriptions', icon: icons.wallet },
   { name: 'insights', title: 'Insights', icon: icons.activity },
@@ -8,7 +8,7 @@ export const tabs = [
 ];
 
 export const HOME_USER = {
-  name: 'Adrian | JS Mastery',
+  name: ' Matthew Idungafa',
 };
 
 export const HOME_BALANCE = {
@@ -16,7 +16,7 @@ export const HOME_BALANCE = {
   nextRenewalDate: '2026-03-18T09:00:00.000Z',
 };
 
-export const UPCOMING_SUBSCRIPTIONS = [
+export const UPCOMING_SUBSCRIPTIONS: UpcomingSubscription[] = [
   {
     id: 'spotify',
     icon: icons.spotify,
@@ -43,7 +43,7 @@ export const UPCOMING_SUBSCRIPTIONS = [
   },
 ];
 
-export const HOME_SUBSCRIPTIONS = [
+export const HOME_SUBSCRIPTIONS: Subscription[] = [
   {
     id: 'adobe-creative-cloud',
     icon: icons.adobe,
