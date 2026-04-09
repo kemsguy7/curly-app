@@ -1,4 +1,9 @@
-import { HOME_BALANCE, HOME_USER, UPCOMING_SUBSCRIPTIONS } from '@/constants/data';
+import {
+  HOME_BALANCE,
+  HOME_SUBSCRIPTIONS,
+  HOME_USER,
+  UPCOMING_SUBSCRIPTIONS,
+} from '@/constants/data';
 import { icons } from '@/constants/icons';
 import images from '@/constants/images';
 import '@/global.css';
@@ -10,6 +15,8 @@ import { SafeAreaView as RNSafeAreaView } from 'react-native-safe-area-context';
 
 import ListHeading from '@/components/ListHeading';
 import UpcomingSubcriptionCard from '@/components/UpcomingSubcriptionCard';
+
+import SubscriptionCard from '@/components/SubscriptionCard';
 
 const SafeAreaView = styled(RNSafeAreaView);
 export default function Index() {
@@ -45,6 +52,11 @@ export default function Index() {
           showsHorizontalScrollIndicator={false}
           ListEmptyComponent={<Text> No upcoming renewals yet</Text>}
         />
+      </View>
+
+      <View>
+        <ListHeading title='All Subscription' />
+        <SubscriptionCard {...HOME_SUBSCRIPTIONS[0]} />
       </View>
     </SafeAreaView>
   );

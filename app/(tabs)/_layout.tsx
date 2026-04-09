@@ -6,18 +6,18 @@ import { Image, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const tabBar = components.tabBar;
+const TabIcon = ({ focused, icon }: TabIconProps) => {
+  return (
+    <View className='tabs-icon rounded-full'>
+      <View className={clsx('tabs-pill', focused && 'tabs-active')}>
+        <Image source={icon} resizeMode='contain' className='tabs-glyph' />
+      </View>
+    </View>
+  );
+};
 
 const TabLayout = () => {
   const insets = useSafeAreaInsets();
-  const TabIcon = ({ focused, icon }: TabIconProps) => {
-    return (
-      <View className='tabs-icon rounded-full'>
-        <View className={clsx('tabs-pill', focused && 'tabs-active')}>
-          <Image source={icon} resizeMode='contain' className='tabs-glyph' />
-        </View>
-      </View>
-    );
-  };
 
   return (
     <Tabs
@@ -27,8 +27,11 @@ const TabLayout = () => {
         tabBarStyle: {
           position: 'absolute',
           bottom: Math.max(insets.bottom, tabBar.horizontalInset),
+          height: tabBar.height,
+          marginHorizontal: tabBar.horizontalInset,
+          borderRadius: tabBar.radius,
           backgroundColor: colors.primary,
-          borderTopWidth: 40,
+          borderTopWidth: 0,
           elevation: 0,
         },
 
