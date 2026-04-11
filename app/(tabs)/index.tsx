@@ -15,9 +15,8 @@ import { FlatList, Image, Text, View } from 'react-native';
 import { SafeAreaView as RNSafeAreaView } from 'react-native-safe-area-context';
 
 import ListHeading from '@/components/ListHeading';
-import UpcomingSubcriptionCard from '@/components/UpcomingSubcriptionCard';
-
 import SubscriptionCard from '@/components/SubscriptionCard';
+import UpcomingSubcriptionCard from '@/components/UpcomingSubcriptionCard';
 
 const SafeAreaView = styled(RNSafeAreaView);
 export default function Index() {
@@ -58,14 +57,23 @@ export default function Index() {
 
       <View>
         <ListHeading title='All Subscription' />
-        <SubscriptionCard
-          {...HOME_SUBSCRIPTIONS[0]}
-          expanded={expandedSubscriptionId === HOME_SUBSCRIPTIONS[0].id}
-          onPress={() =>
-            setExpandedSubscriptionId((currentId) =>
-              currentId === HOME_SUBSCRIPTIONS[0].id ? null : HOME_SUBSCRIPTIONS[0].id,
-            )
-          }
+        <FlatList
+          ListHeaderComponent={<View className='h-4' />}
+          data={HOME_SUBSCRIPTIONS}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <SubscriptionCard
+              {...item}
+              expanded={expandedSubscriptionId === item.id}
+              onPress={() =>
+                setExpandedSubscriptionId((currentId) => (currentId === item.id ? null : item.id))
+              }
+            />
+          )}
+          extraData={expandedSubscriptionId}
+          ItemSeparatorComponent={() => <View className='h-4 ' />}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={<Text className='home-empty-state'> No Subscriptions yet. </Text>}
         />
       </View>
     </SafeAreaView>
