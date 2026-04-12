@@ -19,6 +19,7 @@ const SubscriptionCard = ({
   startDate,
   status,
 }: SubscriptionCardProps) => {
+  const fallback = 'Not Provided';
   return (
     <Pressable
       onPress={onPress}
@@ -53,7 +54,7 @@ const SubscriptionCard = ({
               <View className='sub-row-copy'>
                 <Text className='sub-level'>Payment: </Text>
                 <Text className='sub-value' numberOfLines={1} ellipsizeMode='tail'>
-                  {paymentMethod?.trim()}
+                  {paymentMethod?.trim() || fallback}
                 </Text>
               </View>
             </View>
@@ -61,7 +62,7 @@ const SubscriptionCard = ({
               <View className='sub-row-copy'>
                 <Text className='sub-level'>Started: </Text>
                 <Text className='sub-value' numberOfLines={1} ellipsizeMode='tail'>
-                  {startDate ? formatSubscriptionDateTime(startDate) : ''}
+                  {startDate ? formatSubscriptionDateTime(startDate) : fallback}
                 </Text>
               </View>
             </View>
@@ -69,7 +70,7 @@ const SubscriptionCard = ({
               <View className='sub-row-copy'>
                 <Text className='sub-level'>Renewal Date: </Text>
                 <Text className='sub-value' numberOfLines={1} ellipsizeMode='tail'>
-                  {renewalDate ? formatSubscriptionDateTime(renewalDate) : ''}
+                  {renewalDate ? formatSubscriptionDateTime(renewalDate) : fallback}
                 </Text>
               </View>
             </View>
@@ -77,7 +78,7 @@ const SubscriptionCard = ({
               <View className='sub-row-copy'>
                 <Text className='sub-level'>Category: </Text>
                 <Text className='sub-value' numberOfLines={1} ellipsizeMode='tail'>
-                  {category?.trim() || plan?.trim}
+                  {category?.trim() || fallback}
                 </Text>
               </View>
             </View>
@@ -86,7 +87,7 @@ const SubscriptionCard = ({
               <View className='sub-row-copy'>
                 <Text className='sub-level'>status: </Text>
                 <Text className='sub-value' numberOfLines={1} ellipsizeMode='tail'>
-                  {status ? formatStatusLabel(status) : ''}
+                  {status ? formatStatusLabel(status) : fallback}
                 </Text>
               </View>
             </View>

@@ -55,7 +55,7 @@ export default function Index() {
                 ListEmptyComponent={<Text> No upcoming renewals yet</Text>}
               />
             </View>
-            <ListHeading title='All Subscription' />
+            <ListHeading title='All Subscriptions' />
           </>
         )}
         data={HOME_SUBSCRIPTIONS}
