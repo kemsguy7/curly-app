@@ -2,12 +2,14 @@ import { useClerk, useUser } from '@clerk/expo';
 import { styled } from 'nativewind';
 import { Pressable, Text } from 'react-native';
 import { SafeAreaView as RNSafeAreaView } from 'react-native-safe-area-context';
+import { usePostHog } from 'posthog-react-native';
 
 const SafeAreaView = styled(RNSafeAreaView);
 
 const Settings = () => {
   const { user } = useUser();
   const { signOut } = useClerk();
+  const posthog = usePostHog();
 
   const primaryEmail = user?.primaryEmailAddress?.emailAddress;
   const displayName =
@@ -28,7 +30,11 @@ const Settings = () => {
 
       <Pressable
         accessibilityRole='button'
-        onPress={() => signOut()}
+        onPress={() => {
+          posthog.capture('user_signed_out');
+          posthog.reset();
+          signOut();
+        }}
         className='items-center rounded-2xl bg-accent py-4'
       >
         <Text className='text-base font-sans-bold text-primary'>Sign out</Text>

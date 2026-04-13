@@ -11,6 +11,7 @@ import { getClerkErrorMessage, getClerkFieldErrors } from '@/lib/clerk-errors';
 import { useAuth, useSignIn } from '@clerk/expo';
 import { Link } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { usePostHog } from 'posthog-react-native';
 import {
   ActivityIndicator,
   Pressable,
@@ -22,6 +23,7 @@ import {
 export default function SignInScreen() {
   const { isLoaded: authLoaded } = useAuth();
   const { signIn, fetchStatus } = useSignIn();
+  const posthog = usePostHog();
 
   const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
@@ -127,6 +129,9 @@ export default function SignInScreen() {
       }
 
       if (signIn?.status === 'complete') {
+        const email = normalizeEmail(emailAddress);
+        posthog.identify(email, { $set: { email } });
+        posthog.capture('user_signed_in', { method: 'password' });
         await finalizeAndGoHome();
         return;
       }
@@ -169,6 +174,7 @@ export default function SignInScreen() {
       }
 
       if (signIn?.status === 'complete') {
+        posthog.capture('user_signed_in', { method: 'trust_code' });
         await finalizeAndGoHome();
       }
     } finally {
@@ -219,6 +225,7 @@ export default function SignInScreen() {
       }
 
       if (signIn.status === 'complete') {
+        posthog.capture('user_signed_in', { method: 'mfa' });
         await finalizeAndGoHome();
       }
     } finally {

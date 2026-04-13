@@ -7,6 +7,7 @@ import { useUser } from '@clerk/expo';
 import dayjs from 'dayjs';
 import { styled } from 'nativewind';
 import { useState } from 'react';
+import { usePostHog } from 'posthog-react-native';
 import { FlatList, Image, Text, View } from 'react-native';
 import { SafeAreaView as RNSafeAreaView } from 'react-native-safe-area-context';
 
@@ -17,6 +18,7 @@ import UpcomingSubcriptionCard from '@/components/UpcomingSubcriptionCard';
 const SafeAreaView = styled(RNSafeAreaView);
 export default function Index() {
   const { user } = useUser();
+  const posthog = usePostHog();
   const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<string | null>(null);
 
   const displayName =
@@ -67,9 +69,22 @@ export default function Index() {
           <SubscriptionCard
             {...item}
             expanded={expandedSubscriptionId === item.id}
-            onPress={() =>
-              setExpandedSubscriptionId((currentId) => (currentId === item.id ? null : item.id))
-            }
+            onPress={() => {
+              const isExpanding = expandedSubscriptionId !== item.id;
+              setExpandedSubscriptionId((currentId) => (currentId === item.id ? null : item.id));
+              if (isExpanding) {
+                posthog.capture('subscription_card_expanded', {
+                  subscription_id: item.id,
+                  subscription_name: item.name,
+                  billing: item.billing,
+                });
+              } else {
+                posthog.capture('subscription_card_collapsed', {
+                  subscription_id: item.id,
+                  subscription_name: item.name,
+                });
+              }
+            }}
           />
         )}
         extraData={expandedSubscriptionId}

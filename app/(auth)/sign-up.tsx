@@ -11,11 +11,13 @@ import { getClerkErrorMessage, getClerkFieldErrors } from '@/lib/clerk-errors';
 import { useAuth, useSignUp } from '@clerk/expo';
 import { Link } from 'expo-router';
 import { useState } from 'react';
+import { usePostHog } from 'posthog-react-native';
 import { ActivityIndicator, Pressable, Text, TextInput, View } from 'react-native';
 
 export default function SignUpScreen() {
   const { isSignedIn, isLoaded: authLoaded } = useAuth();
   const { signUp, fetchStatus } = useSignUp();
+  const posthog = usePostHog();
 
   const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
@@ -114,6 +116,12 @@ export default function SignUpScreen() {
       }
 
       if (signUp.status === 'complete') {
+        const email = signUp.emailAddress ?? emailAddress;
+        posthog.identify(email, {
+          $set: { email },
+          $set_once: { signup_date: new Date().toISOString() },
+        });
+        posthog.capture('user_signed_up', { method: 'email_password' });
         await finalizeAndGoHome();
       } else {
         setBannerError('We verified your email, but your account still needs a few more details.');
